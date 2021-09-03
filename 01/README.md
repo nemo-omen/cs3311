@@ -16,9 +16,9 @@ struct MyRecord {
 
 Create a variable of type `MyRecord`, copy some string into the Name field. 
 
-Now create a file in binary mode (wb) and write this record into it 100,000 times, put the loop variable in the ID field of the variable. We use binary mode to have the same length for records inside the file.
+Now create a file in binary mode (`wb`) and write this record into it 100,000 times, put the loop variable in the `ID` field of the variable. We use binary mode to have the same length for records inside the file.
 
-Close the file, and open it in read/write mode (r+b). 
+Close the file, and open it in read/write mode (`r+b`). 
 
 #### Case 1:
 
@@ -29,8 +29,10 @@ Start timer, read all 100,000 blocks. What was the total time?
 Start timer, in a loop that repeats 100,000 times, generate random numbers, read the block. What was 
 the total time? 
 
-Hint: to read block n, you can use fseek function to go to the block then read it. Use (n-1)*1024 to find 
-the offset of the block from the beginning of the file  Repeat Case 1 and Case 2. Do you get different timings? Why? 
+Hint: to read block `n`, you can use `fseek` function to go to the block then read it. Use `(n-1)*1024` to find 
+the offset of the block from the beginning of the file. 
+
+Repeat Case 1 and Case 2. Do you get different timings? Why? 
 
 #### Deliverable:
 
