@@ -11,14 +11,16 @@ struct MyRecord {
 
 void writeRecord();
 void readAllData();
-void readSingleRecord();
-char* makeRandomName(int nameLength);
+void readDataWithRandom();
+int getRandom(int min, int max);
 
 int main() {
 
   writeRecord();
 
-  readAllData();
+  // readAllData();
+
+  readDataWithRandom();
 
   return 0;
 }
@@ -65,4 +67,31 @@ void readAllData() {
 
     fclose(fp);
   }
+}
+
+void readDataWithRandom() {
+  FILE *fp;
+
+  struct MyRecord rec;
+
+  fp = fopen("data.bin", "rb");
+
+  if(fp == NULL) {
+    printf("Error opening data.bin.");
+
+    exit(1);
+  } else {
+    for(int i = 0; i < 100000; i++) {
+      int rando = getRandom(1, 100);
+
+      fread(&rec, sizeof(struct MyRecord), 1, fp);
+      printf("Record: {ID: %d, NAME: %s}\n", rec.ID, rec.Name);
+    }
+  }
+
+  fclose(fp);
+}
+
+int getRandom(int min, int max) {
+  return (rand() % (max - min + 1) + min);
 }
