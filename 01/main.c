@@ -12,15 +12,13 @@ struct MyRecord {
 void writeRecord();
 void readAllData();
 void readDataWithRandom();
+void generateReadWriteReports(int iterations);
 int getRandom(int min, int max);
+
 
 int main() {
 
-  writeRecord();
-
-  // readAllData();
-
-  readDataWithRandom();
+  generateReadWriteReports(10);
 
   return 0;
 }
@@ -62,7 +60,7 @@ void readAllData() {
   } else {
     for(int i = 1; i <= 100000; i++) {
       fread(&rec, sizeof(struct MyRecord), 1, fp);
-      printf("Record: {ID: %d, NAME: %s}\n", rec.ID, rec.Name);
+      // printf("Record: {ID: %d, NAME: %s}\n", rec.ID, rec.Name);
     }
 
     fclose(fp);
@@ -85,12 +83,51 @@ void readDataWithRandom() {
       int rando = getRandom(1, 100);
 
       fread(&rec, sizeof(struct MyRecord), 1, fp);
-      printf("Record: {ID: %d, NAME: %s}\n", rec.ID, rec.Name);
+      // printf("Record: {ID: %d, NAME: %s}\n", rec.ID, rec.Name);
     }
   }
 
   fclose(fp);
 }
+
+void generateReadWriteReports(int iterations) {
+
+  struct ReportData {
+    long read;
+    long readrandom;
+  };
+
+
+  struct ReportData allReports[iterations];
+
+  for(int i = 0; i < iterations; i ++) {
+    clock_t w, r;
+    struct ReportData report;
+
+    writeRecord();
+
+    w = clock();
+    readAllData();
+    w = clock() - w;
+    report.read = w;
+
+    r = clock();
+    readDataWithRandom();
+    r = clock() - r;
+    report.readrandom = r;
+
+    // printf("readAllData() completed in %lums\n", w);
+    // printf("readDataWithRandom() completed in %lums\n", r);
+
+    allReports[i] = report;
+  }
+
+  for(int r = 0; r < iterations; r++) {
+    printf("Iteration: %d\nNormal Read: %lu\nRead w/ Random: %lu\n", r + 1, allReports[r].read, allReports[r].readrandom);
+  }
+}
+
+
 
 int getRandom(int min, int max) {
   return (rand() % (max - min + 1) + min);
