@@ -39,3 +39,7 @@ Repeat Case 1 and Case 2. Do you get different timings? Why?
 Write  a  report  about  your  experiments.  Put  your  code  in  the  report.  Discuss  your  results  and  findings.  
 
 Save your report in pdf format, and submit it through BB. 
+
+## Notes & Resources
+
+[How to measure time taken by a function in C?](https://www.geeksforgeeks.org/how-to-measure-time-taken-by-a-program-in-c/)
