@@ -10,12 +10,15 @@ struct MyRecord {
 };
 
 void writeRecord();
-void readWholeFile(FILE fp);
-void readFileRecord(FILE fp, int offset);
+void readAllData();
+void readSingleRecord();
+char* makeRandomName(int nameLength);
 
 int main() {
 
   writeRecord();
+
+  readAllData();
 
   return 0;
 }
@@ -42,4 +45,24 @@ void writeRecord() {
   }
 
   fclose(fp);
+}
+
+void readAllData() {
+  FILE *fp;
+  struct MyRecord rec;
+
+  fp = fopen("data.bin", "rb");
+
+  if(fp == NULL) {
+    printf("Error opening data.bin\n");
+
+    exit(1);
+  } else {
+    for(int i = 1; i <= 100000; i++) {
+      fread(&rec, sizeof(struct MyRecord), 1, fp);
+      printf("Record: {ID: %d, NAME: %s}\n", rec.ID, rec.Name);
+    }
+
+    fclose(fp);
+  }
 }
