@@ -10,8 +10,10 @@ struct MyRecord {
 };
 
 struct ReportData {
-  long read;
-  long readrandom;
+  double read;
+  double random;
+  double difference;
+  char* longer;
 };
 
 void writeRecord();
@@ -24,7 +26,7 @@ void printReport(int iterations, struct ReportData records[]);
 
 int main() {
 
-  generateReadWriteReports(10);
+  generateReadWriteReports(50);
 
   return 0;
 }
@@ -66,7 +68,6 @@ void readAllData() {
   } else {
     for(int i = 1; i <= 100000; i++) {
       fread(&rec, sizeof(struct MyRecord), 1, fp);
-      // printf("Record: {ID: %d, NAME: %s}\n", rec.ID, rec.Name);
     }
 
     fclose(fp);
@@ -86,10 +87,9 @@ void readDataWithRandom() {
     exit(1);
   } else {
     for(int i = 0; i < 100000; i++) {
-      int rando = getRandom(1, 100);
+      int rando = getRandom(1, 1000);
 
       fread(&rec, sizeof(struct MyRecord), 1, fp);
-      // printf("Record: {ID: %d, NAME: %s}\n", rec.ID, rec.Name);
     }
   }
 
@@ -101,40 +101,78 @@ void generateReadWriteReports(int iterations) {
   struct ReportData allReports[iterations];
 
   for(int i = 0; i < iterations; i ++) {
-    clock_t w, r;
+    clock_t 
+      w_start, 
+      w_end, 
+      r_start, 
+      r_end;
+
+    double w_time, r_time;
+
     struct ReportData report;
 
     writeRecord();
 
-    w = clock();
+    w_start = clock();
     readAllData();
-    w = clock() - w;
-    report.read = w;
+    w_end = clock();
+    w_time = ((double) w_end - w_start) / CLOCKS_PER_SEC;
+    report.read = w_time;
 
-    r = clock();
+    r_start = clock();
     readDataWithRandom();
-    r = clock() - r;
-    report.readrandom = r;
+    r_end = clock();
+    r_time = ((double) r_end - r_start) / CLOCKS_PER_SEC;
+    report.random = r_time;
 
-    // printf("readAllData() completed in %lums\n", w);
-    // printf("readDataWithRandom() completed in %lums\n", r);
+    if(r_time > w_time) {
+      report.difference = r_time - w_time;
+      report.longer = "Random";
+    } else {
+      report.difference = w_time - r_time;
+      report.longer = "Nonrandom";
+    }
 
     allReports[i] = report;
   }
 
-  // for(int r = 0; r < iterations; r++) {
-  //   printf("Iteration: %d\nNormal Read: %lu\nRead w/ Random: %lu\n", r + 1, allReports[r].read, allReports[r].readrandom);
-  // }
   printReport(iterations, allReports);
 }
 
 void printReport(int iterations, struct ReportData records[]) {
-  printf("Iteration\tRead Only Time\tRead w/Random Time\n");
-  printf("--------------------------------------------------\n");
+  double 
+    totalRead,
+    averageRead,
+    totalRandom, 
+    averageRandom,
+    totalDifference, 
+    averageDifference;
+  
+  printf("-----------------------------------------------------------------------\n");
+  printf("Iteration\tRead Time\tRandom Time\tDifference\tLonger\n");
+  printf("-----------------------------------------------------------------------\n");
   for(int i = 0; i < iterations; i ++) {
-    printf("%d\t\t   %lums   \t\t%lums\n", i + 1, records[i].read, records[i].readrandom);
+    totalRead = totalRead + records[i].read;
+    totalRandom = totalRandom + records[i].random;
+    totalDifference = totalDifference + records[i].difference;
+
+    printf(
+      "%d\t\t%fs\t%fs\t%fs\t%s\n",
+      i +1,
+      records[i].read,
+      records[i].random,
+      records[i].difference,
+      records[i].longer
+      );
   }
-  printf("\n");
+  printf("-----------------------------------------------------------------------\n");
+
+  averageRead = totalRead / iterations;
+  averageRandom = totalRandom / iterations;
+  averageDifference = totalDifference / iterations;
+
+  printf("Average:\t%fs\t%fs\t%fs\n", averageRead, averageRandom, averageDifference);
+  printf("-----------------------------------------------------------------------\n");
 }
 
 int getRandom(int min, int max) {
