@@ -25,7 +25,8 @@ void printReport(int iterations, struct ReportData records[]);
 
 
 int main() {
-
+  
+  printf("Reading data...\n");
   generateReadWriteReports(50);
 
   return 0;
@@ -66,6 +67,7 @@ void readAllData() {
 
     exit(1);
   } else {
+
     for(int i = 1; i <= 100000; i++) {
       fread(&rec, sizeof(struct MyRecord), 1, fp);
     }
@@ -87,9 +89,12 @@ void readDataWithRandom() {
     exit(1);
   } else {
     for(int i = 0; i < 100000; i++) {
-      int rando = getRandom(1, 1000);
+      int rando = getRandom(1, 100000);
+
+      fseek(fp, sizeof(struct MyRecord) * rando, SEEK_SET);
 
       fread(&rec, sizeof(struct MyRecord), 1, fp);
+      // printf("{ID: %d, Name: %s}", rec.ID, rec.Name);
     }
   }
 
