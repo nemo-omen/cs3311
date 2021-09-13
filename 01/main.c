@@ -1,3 +1,8 @@
+// Jeff Caldwell
+// CS 3311
+// Assignment 01
+// September 13, 2021
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
