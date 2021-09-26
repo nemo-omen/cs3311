@@ -123,14 +123,14 @@ int main(int argc, const char** argv) {
     itemIds[i] = val.first;
   }
 
+  cout << "Before delete:" << endl;
   h.printTable();
 
-  for(int i = 0; i < 10; i++) {
+  for(int i = 0; i < 25; i++) {
     h.removeItem(itemIds[i]);
   }
 
   cout << "\nAfter delete: " << endl;
-
   h.printTable();
 
   return 0;
