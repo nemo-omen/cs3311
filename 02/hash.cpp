@@ -18,8 +18,9 @@ class HashTable {
     void insertItem(int id, string tag);
     void insertItem(pair<int, string> val);
     void removeItem(int id);
+    pair<int, string> findItem(int id);
     
-    void printItem(int id);
+    void printItem(pair<int, string> it);
     void printTable();
 };
 
@@ -67,8 +68,22 @@ void HashTable::removeItem(int id) {
   }
 }
 
-void HashTable::printItem(int id) {
-  cout << "Maybe later!" << endl;
+pair<int, string> HashTable::findItem(int id) {
+  int index = hashFunction(id);
+  list<pair<int, string> >::iterator i;
+  pair<int, string> myRec;
+
+  for(i = table[index].begin(); i != table[index].end(); i++) {
+    if(i->first == id) {
+      myRec.first = i->first;
+      myRec.second = i->second;
+    }
+  }
+    return myRec;
+}
+
+void HashTable::printItem(pair<int, string> it) {
+  cout << "{" << it.first << ", " << it.second << "}" << endl;
 }
 
 void HashTable::printTable() {
@@ -86,52 +101,50 @@ void HashTable::printTable() {
   return;
 }
 
-pair<int, string> generatePair() {
-  random_device rd;
-  mt19937 gen(rd());
-  uniform_int_distribution<> dist(100, 999);
-  uniform_int_distribution<> dista(0, 25);
-
-  pair<int, string> val;
-  int id = dist(gen);
-  const int MAX = 26;
-
-  string alpha[MAX] = {
-    "a", "b", "c", "d", "e", "f", 
-    "g", "h", "i", "j", "k", "l",
-    "m", "n", "o", "p", "q", "r",
-    "s", "t", "u", "v", "w", "x",
-    "y", "z"
-  };
-
-  string tag = "";
-  for(int i = 0; i < 3; i++) {
-    tag = tag + alpha[dista(gen) % MAX];
-  }
-  val.first = id;
-  val.second = tag;
-  return val;
-}
-
 int main(int argc, const char** argv) {
   HashTable h;
-  int itemIds[30];
 
-  for(int i = 0; i < 30; i++) {
-    pair val = generatePair();
-    h.insertItem(val);
-    itemIds[i] = val.first;
+  if(h.isEmpty()) {
+    cout << "\nTable empty. Beginning insertion." << endl;
+  } else {
+    cout << "\nTable not empty. There's a problem!." << endl;
   }
 
-  cout << "Before delete:" << endl;
+  h.insertItem(110, "XYZ");
+  h.insertItem(121, "ABC");
+  h.insertItem(221, "DEF");
+  h.insertItem(222, "HJK");
+  h.insertItem(333, "FUI");
+  h.insertItem(444, "RYU");
+  h.insertItem(555, "ODU");
+  h.insertItem(556, "GHI");
+  h.insertItem(666, "JKL");
+  h.insertItem(777, "ERW");
+  h.insertItem(888, "UTI");
+  h.insertItem(999, "FDH");
+
+  cout << "\nFull Table: " << endl;
   h.printTable();
 
-  for(int i = 0; i < 25; i++) {
-    h.removeItem(itemIds[i]);
+  cout << "\nItems with collisions: " << endl;
+
+  h.printItem(h.findItem(121));
+  h.printItem(h.findItem(221));
+  h.printItem(h.findItem(556));
+  h.printItem(h.findItem(666));
+
+  h.removeItem(121);
+  h.removeItem(556);
+
+  cout << "\nItems after removal of one colliding item: " << endl;
+  h.printItem(h.findItem(666));
+  h.printItem(h.findItem(221));
+
+  if(!h.isEmpty()) {
+    cout << "\nTable not empty. Operations successful." << endl;
+  } else {
+    cout << "\nTable empty. There's a problem!" << endl;
   }
-
-  cout << "\nAfter delete: " << endl;
-  h.printTable();
 
   return 0;
 }
