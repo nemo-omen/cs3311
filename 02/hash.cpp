@@ -1,9 +1,11 @@
+// Jeff Caldwell
+// CS 3311
+// Assignment 02
+
 #include <iostream>
 #include <string>
-#include <cstring>
 #include <list>
 #include <iterator>
-#include <random>
 
 using namespace std;
 
@@ -24,6 +26,12 @@ class HashTable {
     void printTable();
 };
 
+/**
+ * @brief Checks whether table member contains elements
+ * 
+ * @return true 
+ * @return false 
+ */
 bool HashTable::isEmpty() const {
   int sum{};
   for (int i{}; i < buckets; i++) {
@@ -37,10 +45,25 @@ bool HashTable::isEmpty() const {
   return false;
 }
 
+/**
+ * @brief Simple mod hash function that returns the
+ *        last digit of a given integer
+ * 
+ * @param id 
+ * @return int 
+ */
 int HashTable::hashFunction(int id) {
   return (id % buckets);
 }
 
+/**
+ * @brief Creates and inserts a pair into the table into
+ *        the "row" that coincides with the hash
+ *        of the item's ID
+ * 
+ * @param id 
+ * @param tg 
+ */
 void HashTable::insertItem(int id, string tg) {
   int index = hashFunction(id);
   pair<int, string> item;
@@ -49,10 +72,22 @@ void HashTable::insertItem(int id, string tg) {
   table[index].push_back(item);
 }
 
+
+/**
+ * @brief Inserts a given pair into the hashtable
+ * 
+ * @param val 
+ */
 void HashTable::insertItem(pair<int, string> val) {
   insertItem(val.first, val.second);
 }
 
+
+/**
+ * @brief Removes item whose ID matches the given ID
+ * 
+ * @param id 
+ */
 void HashTable::removeItem(int id) {
   int index = hashFunction(id);
   list<pair<int, string> >::iterator i;
@@ -68,6 +103,12 @@ void HashTable::removeItem(int id) {
   }
 }
 
+/**
+ * @brief Returns a pair whose ID matches the given ID
+ * 
+ * @param id 
+ * @return pair<int, string> 
+ */
 pair<int, string> HashTable::findItem(int id) {
   int index = hashFunction(id);
   list<pair<int, string> >::iterator i;
@@ -82,10 +123,20 @@ pair<int, string> HashTable::findItem(int id) {
     return myRec;
 }
 
+/**
+ * @brief Simple print function for an item in the table
+ * 
+ * @param it  the item to print
+ */
 void HashTable::printItem(pair<int, string> it) {
   cout << "{" << it.first << ", " << it.second << "}" << endl;
 }
 
+
+/**
+ * @brief Prints the whole table
+ * 
+ */
 void HashTable::printTable() {
   for(int i{}; i < buckets; i++) {
     if(table[i].size() == 0) {
@@ -101,6 +152,7 @@ void HashTable::printTable() {
   return;
 }
 
+// Driver/test code
 int main(int argc, const char** argv) {
   HashTable h;
 
@@ -126,12 +178,14 @@ int main(int argc, const char** argv) {
   cout << "\nFull Table: " << endl;
   h.printTable();
 
-  cout << "\nItems with collisions: " << endl;
+  cout << "\nItems with colliding IDs: " << endl;
 
   h.printItem(h.findItem(121));
   h.printItem(h.findItem(221));
   h.printItem(h.findItem(556));
   h.printItem(h.findItem(666));
+
+  cout << "\nRemoving items with colliding IDs 121 & 556" << endl;
 
   h.removeItem(121);
   h.removeItem(556);
@@ -139,6 +193,9 @@ int main(int argc, const char** argv) {
   cout << "\nItems after removal of one colliding item: " << endl;
   h.printItem(h.findItem(666));
   h.printItem(h.findItem(221));
+
+  cout << "\nTable after colliding item removal: " << endl;
+  h.printTable();
 
   if(!h.isEmpty()) {
     cout << "\nTable not empty. Operations successful." << endl;
