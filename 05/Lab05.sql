@@ -72,9 +72,11 @@ SELECT COUNT(*) FROM `Grading` WHERE CID = '1' AND Year = '2020';
 SELECT AVG(Grade) FROM `Grading` WHERE CID = '1' AND Year = '2020';
 
 -- will return 91.87999877929687
+-- join?
 SELECT AVG(Grade) FROM `Grading` WHERE CID = '1' AND Year = '2020' OR Year = '2010';
 
 -- will return 3
+-- group by
 SELECT COUNT(*) FROM `Grading` WHERE StID = '6';
 
 -- will return 89.07499885559082
