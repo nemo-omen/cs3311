@@ -1,7 +1,11 @@
 const path = require('path');
+const { fileURLToPath } = require('url');
 const { app, BrowserWindow } = require('electron');
 
+
 const env = process.env.NODE_ENV || 'development';
+
+// const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 if (env === 'development') {
   require('electron-reload')(__dirname, {
@@ -17,8 +21,8 @@ const createWindow = () => {
     frame: true,
     autoHideMenuBar: true,
     webPreferences: {
-      preload: './preload.js'
-      // preload: path.join(__dirname, 'preload.js')
+      // preload: 'preload.js'
+      preload: `preload.js`
     }
   });
 

@@ -1,6 +1,10 @@
 :root {
-  --dark: #141212;
+  --dark: #010B13;
   --light: #dadada;
+  --powder-blue: #C2DFE3;
+  --vivid-tangarine: #F4998D;
+  --maize-crayola: #F9C846;
+  --light-pink: #F4AFB4;
 }
 
 body {
