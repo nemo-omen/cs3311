@@ -4,7 +4,7 @@ let app = new Reef('#app', {
   data: {
     expanded: false,
   },
-  template: `<h1>Hello, Reefers!</h1><p>Etc...</p>`
+  template: `<h1>Hello, Reef!</h1><p>Etc...</p>`
 });
 
 const menu = document.querySelector('.sidebar-menu');
