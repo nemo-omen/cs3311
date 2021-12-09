@@ -82,4 +82,4 @@ SELECT Course.CName, Avg(Grading.Grade)
   FROM `Course`
     INNER JOIN Grading
       ON Grading.CID=Course.CID
-  GROUP BY Course.CName; 
+  GROUP BY Course.CName;
